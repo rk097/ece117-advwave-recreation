@@ -1,0 +1,31 @@
+Testing on "apple.wav"
+
+Word spoken: "apple"
+Prompt: "Transcribe the spoken word. "
+                            "Return only the word in lowercase, "
+                            "without explanation or punctuation."
+
+Allowing "apple", "Apple", " apple", and " Apple" (pure first token prediction):
+Random perturbation experiment:
+Epsilon: 0.000 | Correct probability: 0.997789 | Prediction: 'apple' [control]
+Full response: 'apple'
+Epsilon: 0.001 | Correct probability: 0.997835 | Prediction: 'apple'
+Full response: 'apple'
+Epsilon: 0.010 | Correct probability: 0.997977 | Prediction: 'apple'
+Full response: 'apple'
+Epsilon: 0.050 | Correct probability: 0.997311 | Prediction: 'apple'
+Full response: 'apple'
+Epsilon: 0.100 | Correct probability: 0.998717 | Prediction: 'apple'
+Full response: 'apple'
+
+FGSM word recognition experiment:
+Epsilon: 0.000 | Correct probability: 0.997789 | Prediction: 'apple'
+Full response: 'apple'
+Epsilon: 0.001 | Correct probability: 0.993418 | Prediction: 'apple'
+Full response: 'apple'
+Epsilon: 0.010 | Correct probability: 0.989211 | Prediction: 'apple'
+Full response: 'apple'
+Epsilon: 0.050 | Correct probability: 0.001395 | Prediction: 'bubble'
+Full response: 'bubble'
+Epsilon: 0.100 | Correct probability: 0.001399 | Prediction: 'r'
+Full response: 'rhubarb'
