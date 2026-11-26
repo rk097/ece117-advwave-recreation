@@ -74,40 +74,26 @@ outputs = model(
     use_cache=False
 )
 
-# A simple diagnostic objective
-loss = outputs.logits[:, -1, :].float().square().mean()
+import torch.nn.functional as F
+
+target_ids = processor.tokenizer.encode(
+    "apple",
+    add_special_tokens=False
+)
+
+assert len(target_ids) == 1
+
+target = torch.tensor(
+    target_ids,
+    device=features.device
+)
+
+logits = outputs.logits[:, -1, :].float()
+
+loss = F.cross_entropy(logits, target)
 
 grad, = torch.autograd.grad(loss, features)
 
-print("Feature shape:", features.shape)
-print("Gradient shape:", grad.shape)
+print("Recognition loss:", loss.item())
 print("Gradient norm:", grad.norm().item())
-
-print(
-    "Peak VRAM:",
-    torch.cuda.max_memory_allocated() / 2**30,
-    "GiB"
-)
-
-logits = outputs.logits[0, -1, :].detach().float()
-
-probs = torch.softmax(logits, dim=-1)
-
-values, indices = torch.topk(probs, k=10)
-
-print("\nTop 10 next-token predictions:")
-
-for probability, token_id in zip(values, indices):
-    token = processor.tokenizer.decode([token_id.item()])
-
-    print(
-        repr(token),
-        f"{probability.item():.6f}"
-    )
-
-print("\nLogits shape:", outputs.logits.shape)
-
-print(
-    "Actual audio frames:",
-    inputs["feature_attention_mask"].sum().item()
-)
+print("Finite gradients:", torch.isfinite(grad).all().item())
